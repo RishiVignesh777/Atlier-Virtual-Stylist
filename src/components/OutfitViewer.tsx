@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { OutfitOption, OutfitPiece } from '../types/stylist';
+import { ShopSimilarSection } from './ShopSimilarSection';
 import {
   Sparkles,
   Camera,
@@ -14,7 +15,10 @@ import {
   Columns,
   Maximize,
   ArrowRight,
-  ChevronRight
+  ChevronRight,
+  ShoppingBag,
+  Tag,
+  ExternalLink,
 } from 'lucide-react';
 
 interface OutfitViewerProps {
@@ -530,17 +534,34 @@ export const OutfitViewer: React.FC<OutfitViewerProps> = ({
         </div>
       )}
 
+      {/* SHOP SIMILAR ITEMS SECTION FOR THE CURRENT OUTFIT */}
+      {currentOutfit && (
+        <div className="pt-2">
+          <ShopSimilarSection
+            pieces={currentOutfit.pieces}
+            outfitOccasion={currentOutfit.occasion}
+          />
+        </div>
+      )}
+
       {/* PIECE DETAIL MODAL */}
       {activePieceModal && (
         <div className="fixed inset-0 z-50 bg-black/50 backdrop-blur-xs flex items-center justify-center p-4">
           <div className="bg-[#faf8f5] rounded-2xl max-w-md w-full border border-[#e2dcce] p-6 shadow-xl relative animate-in fade-in zoom-in-95 duration-200">
             <div className="flex items-center justify-between pb-3 border-b border-[#e5dfd3]">
-              <span className="text-xs font-semibold uppercase tracking-wider text-[#8c8273]">
-                {activePieceModal.role}
-              </span>
+              <div className="flex items-center gap-2">
+                <span className="text-xs font-semibold uppercase tracking-wider text-[#8c8273]">
+                  {activePieceModal.role}
+                </span>
+                {activePieceModal.retailCategory && (
+                  <span className="text-[10px] text-[#b3543b] font-medium bg-[#f5ebe6] px-2 py-0.5 rounded">
+                    {activePieceModal.retailCategory.split('/')[0]?.trim()}
+                  </span>
+                )}
+              </div>
               <button
                 onClick={() => setActivePieceModal(null)}
-                className="text-xs font-medium text-[#78716c] hover:text-[#1c1917] px-2 py-1 rounded"
+                className="text-xs font-medium text-[#78716c] hover:text-[#1c1917] px-2 py-1 rounded cursor-pointer"
               >
                 Close
               </button>
@@ -557,8 +578,8 @@ export const OutfitViewer: React.FC<OutfitViewerProps> = ({
                   </span>
                 )}
               </div>
-              <div>
-                <h3 className="font-editorial text-xl font-bold text-[#1c1917]">
+              <div className="min-w-0">
+                <h3 className="font-editorial text-xl font-bold text-[#1c1917] leading-tight">
                   {activePieceModal.name}
                 </h3>
                 <div className="flex items-center gap-2 mt-1 text-xs text-[#78716c]">
@@ -569,19 +590,52 @@ export const OutfitViewer: React.FC<OutfitViewerProps> = ({
               </div>
             </div>
 
-            <div className="mt-4 pt-4 border-t border-[#e8e2d7]">
-              <h4 className="text-xs font-semibold uppercase tracking-wider text-[#44403c] mb-1">
-                Sartorial Function
-              </h4>
-              <p className="text-xs text-[#57534e] leading-relaxed">
-                {activePieceModal.description}
-              </p>
+            <div className="mt-4 pt-4 border-t border-[#e8e2d7] space-y-3">
+              <div>
+                <h4 className="text-xs font-semibold uppercase tracking-wider text-[#44403c] mb-1">
+                  Sartorial Function
+                </h4>
+                <p className="text-xs text-[#57534e] leading-relaxed">
+                  {activePieceModal.description}
+                </p>
+              </div>
+
+              {/* Retail Merchandise Category Suggestion */}
+              <div className="p-3 bg-white rounded-xl border border-[#ded7cb]">
+                <div className="flex items-center justify-between gap-2 mb-1">
+                  <span className="text-[10px] uppercase font-bold tracking-wider text-[#8a3b2b] flex items-center gap-1">
+                    <Tag className="w-3 h-3" />
+                    <span>Retail Department Category</span>
+                  </span>
+                </div>
+                <p className="text-xs font-semibold text-[#1c1917]">
+                  {activePieceModal.retailCategory || `${activePieceModal.role} Collection`}
+                </p>
+
+                <div className="mt-2 pt-2 border-t border-[#f0eae0] flex items-center justify-between">
+                  <span className="text-[10px] text-[#78716c]">Search directive:</span>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      const q = encodeURIComponent(
+                        activePieceModal.searchTerms ||
+                          `${activePieceModal.color} ${activePieceModal.name}`
+                      );
+                      window.open(`https://www.google.com/search?tbm=shop&q=${q}`, '_blank');
+                    }}
+                    className="inline-flex items-center gap-1 text-[11px] font-semibold text-[#1c1917] hover:underline"
+                  >
+                    <span>Find on Google Shopping</span>
+                    <ExternalLink className="w-3 h-3" />
+                  </button>
+                </div>
+              </div>
             </div>
 
             <div className="mt-5 text-right">
               <button
                 onClick={() => setActivePieceModal(null)}
-                className="px-4 py-2 bg-[#1c1917] text-white text-xs font-medium rounded-lg hover:bg-[#38332f] transition-colors"
+                className="px-4 py-2 bg-[#1c1917] text-white text-xs font-medium rounded-lg hover:bg-[#38332f] transition-colors cursor-pointer"
               >
                 Got It
               </button>

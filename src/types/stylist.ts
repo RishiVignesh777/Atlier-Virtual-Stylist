@@ -32,6 +32,9 @@ export interface OutfitPiece {
   color: string;
   hex: string;
   isHeroItem: boolean;
+  retailCategory?: string;
+  searchTerms?: string;
+  priceTier?: 'Affordable / High Street' | 'Contemporary' | 'Luxury / Investment';
 }
 
 export interface OutfitOption {

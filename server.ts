@@ -121,7 +121,17 @@ Each outfit MUST have:
   * Footwear (shoes, boots, sneakers, sandals)
   * Bag (tote, clutch, satchel, crossbody)
   * Jewelry & Accents (sunglasses, belt, earrings, necklace, watch)
-  For each piece provide: id, role, name, description, color, hex (an accurate hex code for the piece), and isHeroItem (boolean).
+  For each piece provide:
+  * id (string)
+  * role (string enum)
+  * name (string)
+  * description (string)
+  * color (string)
+  * hex (accurate hex color string like #e2d8c3)
+  * isHeroItem (boolean)
+  * retailCategory: High-level retail merchandise category (e.g. "Knitwear & Sweaters", "Tailored Outerwear & Blazers", "Footwear / Low-Top Sneakers", "Leather Goods & Handbags", "Fine & Demi-Fine Jewelry")
+  * searchTerms: Clean search keyword phrase for finding similar items (e.g. "oversized cream chunky cable knit wool sweater")
+  * priceTier: One of "Affordable / High Street", "Contemporary", or "Luxury / Investment"
 - flatlayPrompt: An ultra-vivid, photography-directing description of a clean, bird's-eye view "flat-lay" arrangement of all these pieces laid neatly on a neutral studio background with soft diffuse light, no humans, pure curated layout.
 
 Respond ONLY with valid JSON matching the exact schema.
@@ -213,6 +223,12 @@ Respond ONLY with valid JSON matching the exact schema.
                         color: { type: Type.STRING },
                         hex: { type: Type.STRING },
                         isHeroItem: { type: Type.BOOLEAN },
+                        retailCategory: { type: Type.STRING },
+                        searchTerms: { type: Type.STRING },
+                        priceTier: {
+                          type: Type.STRING,
+                          enum: ['Affordable / High Street', 'Contemporary', 'Luxury / Investment'],
+                        },
                       },
                       required: ['id', 'role', 'name', 'description', 'color', 'hex', 'isHeroItem'],
                     },
@@ -422,6 +438,12 @@ Respond with the updated Outfit object in JSON format matching the schema.
                   color: { type: Type.STRING },
                   hex: { type: Type.STRING },
                   isHeroItem: { type: Type.BOOLEAN },
+                  retailCategory: { type: Type.STRING },
+                  searchTerms: { type: Type.STRING },
+                  priceTier: {
+                    type: Type.STRING,
+                    enum: ['Affordable / High Street', 'Contemporary', 'Luxury / Investment'],
+                  },
                 },
                 required: ['id', 'role', 'name', 'description', 'color', 'hex', 'isHeroItem'],
               },
